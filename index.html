@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adorn — Your Story</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="header-inner"><a href="index.html"><img class="logo-img" src="adorn-logo.png" alt="Adorn"></a><button class="menu-btn">☰</button><nav class="nav"><a class="active" href="index.html">HOME</a><a href="rings.html">RINGS</a><a href="chains.html">CHAINS</a><a href="bracelets.html">BRACELETS</a><a class="cart-link" href="cart.html">CART <span class="cart-count">0</span></a></nav></div></header>
+<section class="hero"><div class="hero-bg"></div><div class="hero-content"><div class="kicker">ADORN YOUR STORY</div><h1>Wear your story.</h1><p>Modern accessories. Clean design. Pieces chosen to become part of your everyday story.</p><a class="btn" href="#shop">EXPLORE COLLECTION</a></div></section>
+<section id="shop" class="section"><div class="section-head"><div><div class="eyebrow">THE COLLECTION</div><h2>Choose your piece.</h2></div></div><div class="category-grid">
+<a class="category-card rings" href="rings.html"><div><h3>Rings</h3><p>Explore the ring collection →</p></div></a>
+<a class="category-card chains" href="chains.html"><div><h3>Chains</h3><p>Explore the chain collection →</p></div></a>
+<a class="category-card bracelets" href="bracelets.html"><div><h3>Bracelets</h3><p>Explore the bracelet collection →</p></div></a></div></section><section class="section"><div class="section-head"><div><div class="eyebrow">LATEST</div><h2>Latest pieces.</h2></div></div><div id="latest-products" class="product-grid"></div></section>
+<footer>© 2026 ADORN — YOUR STORY</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="common.js"></script><script>
+async function loadLatest(){
+ const box=document.getElementById("latest-products");
+ const r=await sb.from("products").select("id,name,price,image_url,category").order("created_at",{ascending:false}).limit(6);
+ if(r.error){box.innerHTML='<div class="empty" style="grid-column:1/-1">'+esc(r.error.message)+'</div>';return;}
+ box.innerHTML=(r.data||[]).map(p=>{const c=String(p.category||"").toLowerCase();const page=c==="rings"?"rings.html":c==="chains"?"chains.html":c==="bracelets"?"bracelets.html":"index.html";return '<article class="product-card" onclick="location.href=\''+page+'\'"><div class="product-img">'+(p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.name)+'">':'<span class="placeholder">ADORN</span>')+'</div><div class="product-info"><h3>'+esc(p.name)+'</h3><div class="meta"><span>'+esc(p.category||"")+'</span><strong>'+Number(p.price||0).toFixed(2)+'</strong></div></div></article>';}).join("")||'<div class="empty" style="grid-column:1/-1">No products yet.</div>';
+}
+loadLatest();
+</script></body></html>
